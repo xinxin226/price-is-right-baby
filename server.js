@@ -91,6 +91,16 @@ function emitReveal() {
     firstClosest: state.firstClosest,
   });
   io.emit('leaderboard', getLeaderboard());
+  // Tell each participant how many points they scored this round
+  const getRoundPoints = (socketId) => {
+    if (socketId === state.firstExact) return 2;
+    if (socketId === state.firstWithinRange) return 1;
+    if (socketId === state.firstClosest) return 1;
+    return 0;
+  };
+  io.sockets.sockets.forEach((socket) => {
+    socket.emit('your_round_score', { points: getRoundPoints(socket.id) });
+  });
   state.phase = 'reveal';
   state.currentItemIndex += 1;
 }

@@ -19,6 +19,7 @@ const itemUsage = document.getElementById('item-usage');
 const guessInput = document.getElementById('guess');
 const submitGuessBtn = document.getElementById('submit-guess');
 const guessFeedback = document.getElementById('guess-feedback');
+const yourRoundScoreEl = document.getElementById('your-round-score');
 const revealItemNameEl = document.getElementById('reveal-item-name');
 const correctPriceEl = document.getElementById('correct-price');
 const revealWinnersEl = document.getElementById('reveal-winners');
@@ -93,6 +94,7 @@ socket.on('next_item', (data) => {
 
 socket.on('reveal', (data) => {
   showScreen('reveal');
+  yourRoundScoreEl.textContent = ''; // filled in by your_round_score
   revealItemNameEl.textContent = data.itemName || 'Item';
   correctPriceEl.textContent = data.correctPrice != null ? `$${Number(data.correctPrice).toLocaleString()}` : '—';
   const parts = [];
@@ -100,6 +102,17 @@ socket.on('reveal', (data) => {
   if (data.firstWithinRange) parts.push('First within ±10%: 1 pt');
   if (data.firstClosest) parts.push('Closest guess: 1 pt');
   revealWinnersEl.textContent = parts.length ? parts.join(' · ') : 'No one in range this round.';
+});
+
+socket.on('your_round_score', (data) => {
+  const pts = data.points || 0;
+  if (pts === 0) {
+    yourRoundScoreEl.textContent = 'You got 0 points this round.';
+  } else if (pts === 1) {
+    yourRoundScoreEl.textContent = 'You got 1 point this round!';
+  } else {
+    yourRoundScoreEl.textContent = 'You got 2 points this round!';
+  }
 });
 
 socket.on('game_over', (data) => {
