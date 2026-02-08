@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Price is Right: Baby Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1>Price is Right</h1>
+      <p class="subtitle">Baby Edition</p>
+    </header>
+
+    <main>
+      <section id="join-screen" class="screen">
+        <div class="card join-card">
+          <label for="name">Enter your name</label>
+          <input type="text" id="name" placeholder="Your name" maxlength="30" autocomplete="off" />
+          <button type="button" id="join-btn" class="btn btn-primary">Join game</button>
+        </div>
+      </section>
+
+      <section id="lobby-screen" class="screen hidden">
+        <div class="card lobby-card">
+          <p class="welcome">You're in, <span id="player-name"></span>!</p>
+          <p class="waiting">Waiting for the host to start the game…</p>
+          <div class="leaderboard-wrap">
+            <h2>Leaderboard</h2>
+            <ol id="lobby-leaderboard" class="leaderboard"></ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="play-screen" class="screen hidden">
+        <div class="leaderboard-bar">
+          <ol id="play-leaderboard" class="leaderboard inline"></ol>
+        </div>
+        <div class="item-card">
+          <div class="item-image-wrap">
+            <img id="item-image" src="" alt="" />
+          </div>
+          <h2 id="item-name" class="item-name"></h2>
+          <p id="item-usage" class="item-usage"></p>
+          <div class="guess-form">
+            <label for="guess">Your guess ($)</label>
+            <input type="number" id="guess" min="0" step="1" placeholder="0" inputmode="numeric" />
+            <button type="button" id="submit-guess" class="btn btn-primary">Submit</button>
+          </div>
+          <p id="guess-feedback" class="feedback hidden"></p>
+        </div>
+      </section>
+
+      <section id="reveal-screen" class="screen hidden">
+        <div class="card reveal-card">
+          <h2 id="reveal-item-name" class="reveal-item-name"></h2>
+          <p class="reveal-label">The actual price</p>
+          <p id="correct-price" class="correct-price-display"></p>
+          <p id="reveal-winners" class="reveal-winners"></p>
+          <p class="next-msg">Next item coming up…</p>
+        </div>
+      </section>
+
+      <section id="gameover-screen" class="screen hidden">
+        <div class="card gameover-card">
+          <h2>Game over!</h2>
+          <p class="final-scores">Final scores</p>
+          <ol id="final-leaderboard" class="leaderboard"></ol>
+          <p class="thanks">Thanks for playing.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>

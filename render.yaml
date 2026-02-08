@@ -1,0 +1,11 @@
+# Render Blueprint: deploy to get a public URL
+# See https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: price-is-right-baby
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20

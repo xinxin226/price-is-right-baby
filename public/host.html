@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Host — Price is Right: Baby Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .host-header { margin-bottom: 24px; }
+    .host-header h1 { font-size: 1.5rem; }
+    .state-box { margin-bottom: 16px; }
+    .state-box p { margin: 4px 0; }
+    .override-hint { font-size: 0.85rem; color: var(--text-muted, #6b6572); margin: 4px 0 0 0; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="header host-header">
+      <h1>Price is Right: Baby Edition — Host</h1>
+    </header>
+    <main>
+      <div class="card">
+        <div class="state-box">
+          <p><strong>Phase:</strong> <span id="phase">—</span></p>
+          <p><strong>Current item:</strong> <span id="current-item">—</span></p>
+          <p><strong>Submissions this round:</strong> <span id="submissions">0</span> of <span id="player-count">0</span> players</p>
+        </div>
+        <div class="leaderboard-wrap">
+          <h2>Leaderboard</h2>
+          <ol id="host-leaderboard" class="leaderboard"></ol>
+        </div>
+        <div class="host-actions">
+          <button type="button" id="start-btn" class="btn btn-primary">Start game</button>
+          <button type="button" id="next-btn" class="btn btn-secondary">Override: next question</button>
+          <p class="override-hint">Use if someone is out and the round is stuck.</p>
+          <button type="button" id="reset-btn" class="btn btn-secondary">Reset to lobby</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    const phaseEl = document.getElementById('phase');
+    const currentItemEl = document.getElementById('current-item');
+    const submissionsEl = document.getElementById('submissions');
+    const playerCountEl = document.getElementById('player-count');
+    const hostLeaderboard = document.getElementById('host-leaderboard');
+    const startBtn = document.getElementById('start-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    function fetchState() {
+      fetch('/api/state')
+        .then((r) => r.json())
+        .then((data) => {
+          phaseEl.textContent = data.phase || '—';
+          currentItemEl.textContent = data.currentItem ? data.currentItem.name : '—';
+          const count = (data.leaderboard || []).length;
+          playerCountEl.textContent = count;
+          submissionsEl.textContent = data.submissionsCount ?? 0;
+          const list = data.leaderboard || [];
+          hostLeaderboard.innerHTML = list
+            .map((p, i) => `<li><span>${i + 1}. ${p.name}</span><strong>${p.score}</strong></li>`)
+            .join('');
+        })
+        .catch(() => {});
+    }
+
+    startBtn.addEventListener('click', () => {
+      fetch('/api/start', { method: 'POST' }).then(() => fetchState());
+    });
+    nextBtn.addEventListener('click', () => {
+      fetch('/api/next', { method: 'POST' }).then((r) => r.json()).then(() => fetchState());
+    });
+    resetBtn.addEventListener('click', () => {
+      fetch('/api/reset', { method: 'POST' }).then(() => fetchState());
+    });
+
+    fetchState();
+    setInterval(fetchState, 2000);
+  </script>
+</body>
+</html>
