@@ -37,8 +37,7 @@ function renderLeaderboard(list, container, showScores = true) {
   container.innerHTML = list
     .map((p, i) => {
       const name = p.name || 'Player';
-      const score = showScores ? ` ${p.score} pt${p.score !== 1 ? 's' : ''}` : '';
-      return `<li><span>${i + 1}. ${escapeHtml(name)}</span>${showScores ? `<strong> ${p.score}</strong>` : ''}</li>`;
+      return `<li><span>${i + 1}. ${escapeHtml(name)}${showScores ? ` <strong>${p.score}</strong>` : ''}</span></li>`;
     })
     .join('');
 }
