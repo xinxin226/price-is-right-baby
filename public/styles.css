@@ -1,14 +1,14 @@
 :root {
-  --bg: #fef9f3;
-  --surface: #fff;
-  --primary: #e85d75;
-  --primary-dark: #c94a5f;
-  --accent: #ffc857;
-  --text: #2d2a32;
-  --text-muted: #6b6572;
-  --border: #eee5dc;
+  --bg: #f5f0e8;
+  --surface: #faf8f4;
+  --primary: #4a7c59;
+  --primary-dark: #3d6b4a;
+  --accent: #8b7355;
+  --text: #2c2e28;
+  --text-muted: #5c6056;
+  --border: #c4b8a8;
   --radius: 16px;
-  --shadow: 0 4px 20px rgba(45, 42, 50, 0.08);
+  --shadow: 0 4px 20px rgba(44, 46, 40, 0.1);
   --font-display: 'Fredoka', sans-serif;
   --font-body: 'DM Sans', sans-serif;
 }
@@ -168,7 +168,7 @@ body {
 
 .leaderboard li:first-child {
   font-weight: 600;
-  background: linear-gradient(135deg, #fff5f0 0%, #ffe8e0 100%);
+  background: linear-gradient(135deg, #e8f0ea 0%, #d4e5d9 100%);
 }
 
 .leaderboard.inline {
@@ -198,15 +198,15 @@ body {
 
 .item-image-wrap {
   width: 100%;
-  aspect-ratio: 4/3;
   background: var(--border);
   overflow: hidden;
 }
 
 .item-image-wrap img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
+  vertical-align: top;
 }
 
 .item-name {
@@ -236,11 +236,11 @@ body {
 }
 
 .feedback.success {
-  color: #2d8a5e;
+  color: #3d6b4a;
 }
 
 .feedback.error {
-  color: var(--primary);
+  color: var(--primary-dark);
 }
 
 .reveal-card .reveal-item-name {
@@ -306,7 +306,7 @@ body {
 }
 
 .host-actions .btn-secondary:hover {
-  background: #e0d5cc;
+  background: #b8a898;
 }
 
 .current-item-preview {
