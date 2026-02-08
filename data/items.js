@@ -44,7 +44,7 @@ module.exports = [
   },
   {
     id: '7',
-    name: 'Baby Susher Sound Machine',
+    name: 'Baby Shusher Sound Machine',
     usage: 'Newborn to 9 months',
     image: '/images/item7.png',
     price: 35,

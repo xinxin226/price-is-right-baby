@@ -38,7 +38,7 @@ function renderLeaderboard(list, container, showScores = true) {
     .map((p, i) => {
       const name = p.name || 'Player';
       const score = showScores ? ` ${p.score} pt${p.score !== 1 ? 's' : ''}` : '';
-      return `<li><span>${i + 1}. ${escapeHtml(name)}</span>${showScores ? `<strong>${p.score}</strong>` : ''}</li>`;
+      return `<li><span>${i + 1}. ${escapeHtml(name)}</span>${showScores ? ` <strong>${p.score}</strong>` : ''}</li>`;
     })
     .join('');
 }
@@ -99,6 +99,7 @@ socket.on('reveal', (data) => {
   const parts = [];
   if (data.firstExact) parts.push('First exact: 2 pts');
   if (data.firstWithinRange) parts.push('First within ±10%: 1 pt');
+  if (data.firstClosest) parts.push('Closest guess: 1 pt');
   revealWinnersEl.textContent = parts.length ? parts.join(' · ') : 'No one in range this round.';
 });
 

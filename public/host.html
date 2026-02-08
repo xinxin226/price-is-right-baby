@@ -62,7 +62,7 @@
           submissionsEl.textContent = data.submissionsCount ?? 0;
           const list = data.leaderboard || [];
           hostLeaderboard.innerHTML = list
-            .map((p, i) => `<li><span>${i + 1}. ${p.name}</span><strong>${p.score}</strong></li>`)
+            .map((p, i) => `<li><span>${i + 1}. ${p.name}</span> <strong>${p.score}</strong></li>`)
             .join('');
         })
         .catch(() => {});

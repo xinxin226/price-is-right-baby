@@ -21,6 +21,7 @@ let state = {
   submissions: [], // { socketId, guess, timestamp } for current item, in order
   firstExact: null,
   firstWithinRange: null,
+  firstClosest: null,
 };
 let autoAdvanceTimeout = null;
 
@@ -43,6 +44,7 @@ function resetRound() {
   state.submissions = [];
   state.firstExact = null;
   state.firstWithinRange = null;
+  state.firstClosest = null;
 }
 
 function scoreGuess(guess, correctPrice) {
@@ -55,7 +57,29 @@ function scoreGuess(guess, correctPrice) {
   return { withinRange: false, exact: false };
 }
 
+function awardClosestIfNeeded() {
+  if (state.firstExact !== null || state.firstWithinRange !== null) return;
+  if (state.submissions.length === 0) return;
+  const item = items[state.currentItemIndex];
+  if (!item) return;
+  const correctPrice = item.price;
+  let best = null;
+  let bestDiff = Infinity;
+  for (const s of state.submissions) {
+    const diff = Math.abs(s.guess - correctPrice);
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      best = s;
+    }
+  }
+  if (best && state.players[best.socketId]) {
+    state.firstClosest = best.socketId;
+    state.players[best.socketId].score += 1;
+  }
+}
+
 function emitReveal() {
+  awardClosestIfNeeded();
   const item = items[state.currentItemIndex];
   const correctPrice = item ? item.price : null;
   io.emit('reveal', {
@@ -64,7 +88,9 @@ function emitReveal() {
     correctPrice,
     firstExact: state.firstExact,
     firstWithinRange: state.firstWithinRange,
+    firstClosest: state.firstClosest,
   });
+  io.emit('leaderboard', getLeaderboard());
   state.phase = 'reveal';
   state.currentItemIndex += 1;
 }
